@@ -23,7 +23,7 @@ public class Ball {
         this.radius = radius; // in pixels!
     }
 
-    public void tick(double deltaT){
+    protected void tickForWalls(double deltaT){
         if (pixelX < radius || pixelX > d.width - radius) {
             vx = -vx;
         }
@@ -32,7 +32,9 @@ public class Ball {
         } else {
             vy += 9.82 * deltaT;
         }
+    }
 
+    protected void tickPos(double deltaT){
         x += vx * deltaT;
         y += vy * deltaT;
     }
@@ -45,8 +47,8 @@ public class Ball {
         return y;
     }
 
-    public int getRadius(){
-        return radius;
+    public double getRadius(){
+        return (radius / pixelsPerMeter);
     }
 
     public void draw(Graphics g){
@@ -56,5 +58,25 @@ public class Ball {
         g.setColor(color);
         g.fillOval( pixelX - radius
                 , pixelY - radius, radius * 2, radius * 2);
+    }
+
+    public double getMass(){
+        return Math.PI*Math.pow(radius,2)/2;
+    }
+
+    protected double getVx(){
+        return vx;
+    }
+
+    protected double getVy(){
+        return vy;
+    }
+
+    protected void setVx(double vx){
+        this.vx = vx;
+    }
+
+    protected void setVy(double vy){
+        this.vy = vy;
     }
 }
