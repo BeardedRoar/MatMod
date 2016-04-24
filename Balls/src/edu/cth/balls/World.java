@@ -22,6 +22,9 @@ public class World {
         for (Ball b : balls) {
             b.tickForWalls(deltaT);
         }
+        for (Ball b : balls) {
+            b.tickPos(deltaT);
+        }
         for(int i = 0; i < balls.size(); i++){
             Ball balli = balls.get(i);
             double xposi = balli.getX();
@@ -31,19 +34,23 @@ public class World {
                     Ball ballj = balls.get(j);
                     if (Math.pow((xposi - ballj.getX()),2) + Math.pow((yposi - ballj.getY()),2)
                             < Math.pow((radiusi + ballj.getRadius()),2)){
-                        System.out.println("" + Math.pow((xposi - ballj.getX()),2));
-                        System.out.println("collion");
+                        double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
+                        double mbefore = balli.getMass()*getAbsVelocity(balli) +
+                                ballj.getMass()*getAbsVelocity(ballj);
                         Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
                         balli.setVx(newSpeeds.x.x);
                         balli.setVy(newSpeeds.x.y);
                         ballj.setVx(newSpeeds.y.x);
                         ballj.setVy(newSpeeds.y.y);
+                        double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
+                        double mafter = balli.getMass()*getAbsVelocity(balli) +
+                                ballj.getMass()*getAbsVelocity(ballj);
+                        System.out.println("vdiff: " + (vafter - vbefore));
+                        System.out.println("mdiff: " + (mafter - mbefore));
                     }
                 }
         }
-        for (Ball b : balls) {
-            b.tickPos(deltaT);
-        }
+
     }
 
     public List<Ball> getBalls(){
