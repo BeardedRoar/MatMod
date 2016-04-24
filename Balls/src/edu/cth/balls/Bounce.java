@@ -1,27 +1,33 @@
 package edu.cth.balls;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class Bounce extends Animation {
 
-    protected double X, Y, Vx, Vy, deltaT, pixelsPerMeter;
-    protected int radius, firstTime=1, pixelX, pixelY;
-    protected Color color = Color.red;
-    private Ball ball;
+    protected double deltaT;
+    private List<Ball> balls = new ArrayList();
 
     protected void initAnimator() {
         deltaT=0.005; // simulation time interval in seconds
         setDelay((int)(1000*deltaT)); // needed for Animation superclass
-        this.ball = new Ball(d, 3, 3, 2, -1.3, 40, 25, Color.RED);
+        Ball b1 = new Ball(d, 3, 3, 0, -1.3, 40, 25, Color.RED);
+        Ball b2 = new Ball(d, 4, 4, 0, -1.7, 40, 45, Color.BLUE);
+        balls.add(b1);
+        balls.add(b2);
     }
 
     protected void paintAnimator(Graphics g) {
-        ball.tick(deltaT);
+        for (Ball b : balls) {
+            b.tick(deltaT);
+        }
         g.setColor(Color.white);
         //if(firstTime==1) {g.fillRect(0,0,d.width,d.height); firstTime=0;}
         g.fillRect(0,0,d.width,d.height); // slower?
-
-        ball.draw(g);
+        for (Ball b : balls) {
+            b.draw(g);
+        }
     }
 
 }

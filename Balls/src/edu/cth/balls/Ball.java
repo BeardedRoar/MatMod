@@ -9,7 +9,7 @@ public class Ball {
 
     private double x, y, vx, vy, pixelsPerMeter;
     private int radius, pixelX, pixelY;
-    private Color color = Color.red;
+    private Color color;
     private Dimension d;
 
     public Ball(Dimension d, double x, double y, double vx, double vy, double pixelsPerMeter, int radius, Color color){
@@ -19,7 +19,7 @@ public class Ball {
         this.vx = vx; // in m/s
         this.vy = vy;
         this.pixelsPerMeter = pixelsPerMeter;
-
+        this.color = color;
         this.radius = radius; // in pixels!
     }
 
