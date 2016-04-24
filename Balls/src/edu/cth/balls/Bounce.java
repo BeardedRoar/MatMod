@@ -12,7 +12,7 @@ public class Bounce extends Animation {
     protected void initAnimator() {
         deltaT=0.005; // simulation time interval in seconds
         setDelay((int)(1000*deltaT)); // needed for Animation superclass
-        this.ball = new Ball(d);
+        this.ball = new Ball(d, 3, 3, 2, -1.3, 40, 25, Color.RED);
     }
 
     protected void paintAnimator(Graphics g) {

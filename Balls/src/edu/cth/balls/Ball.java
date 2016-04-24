@@ -7,40 +7,40 @@ import java.awt.*;
  */
 public class Ball {
 
-    private double X, Y, Vx, Vy, pixelsPerMeter;
+    private double x, y, vx, vy, pixelsPerMeter;
     private int radius, pixelX, pixelY;
     private Color color = Color.red;
     private Dimension d;
 
-    public Ball(Dimension d){
+    public Ball(Dimension d, double x, double y, double vx, double vy, double pixelsPerMeter, int radius, Color color){
         this.d = d;
-        X = 3; // in meters
-        Y = 3; // Y reference direction downwards!
-        Vx = 2; // in m/s
-        Vy = -1.3;
-        pixelsPerMeter = 40;
+        this.x = x; // in meters
+        this.y = y; // y reference direction downwards!
+        this.vx = vx; // in m/s
+        this.vy = vy;
+        this.pixelsPerMeter = pixelsPerMeter;
 
-        radius = 25; // in pixels!
+        this.radius = radius; // in pixels!
     }
 
     public void tick(double deltaT){
         if (pixelX < radius || pixelX > d.width - radius) {
-            Vx = -Vx;
+            vx = -vx;
         }
         if (pixelY < radius || pixelY > d.height - radius) {
-            Vy  =  -Vy;
+            vy =  -vy;
         }
 
-        X += Vx * deltaT;
-        Y += Vy * deltaT;
+        x += vx * deltaT;
+        y += vy * deltaT;
     }
 
     public double getX(){
-        return X;
+        return x;
     }
 
     public double getY(){
-        return Y;
+        return y;
     }
 
     public int getRadius(){
@@ -48,8 +48,8 @@ public class Ball {
     }
 
     public void draw(Graphics g){
-        pixelX = (int) (pixelsPerMeter * X);
-        pixelY = (int) (pixelsPerMeter * Y);
+        pixelX = (int) (pixelsPerMeter * x);
+        pixelY = (int) (pixelsPerMeter * y);
 
         g.setColor(color);
         g.fillOval( pixelX - radius
