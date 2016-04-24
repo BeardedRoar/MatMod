@@ -28,7 +28,9 @@ public class Ball {
             vx = -vx;
         }
         if (pixelY < radius || pixelY > d.height - radius) {
-            vy =  -vy;
+            vy = -vy;
+        } else {
+            vy += 9.82 * deltaT;
         }
 
         x += vx * deltaT;
