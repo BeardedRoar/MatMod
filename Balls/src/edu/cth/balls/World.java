@@ -16,9 +16,6 @@ public class World {
     public World(){
         collided.add(false);
         collided.add(false);
-        timers.add(500);
-        timers.add(500);
-
     }
 
     public void addBall(Ball ball){
@@ -36,41 +33,33 @@ public class World {
             double radiusi = balli.getRadius();
                 for(int j = (i+1); j < balls.size(); j++){
                     Ball ballj = balls.get(j);
-                    if (Math.pow((xposi - ballj.getX()),2) + Math.pow((yposi - ballj.getY()),2)
-                            < Math.pow((radiusi + ballj.getRadius()),2)&& !collided.get(0) && !collided.get(1)){
-                        collided.set(i, true);
-                        collided.set(j, true);
-                        double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
-                        double mbefore = balli.getMass()*getAbsVelocity(balli) +
-                                ballj.getMass()*getAbsVelocity(ballj);
-                        Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
-                        balli.setVx(newSpeeds.x.x);
-                        balli.setVy(newSpeeds.x.y);
-                        ballj.setVx(newSpeeds.y.x);
-                        ballj.setVy(newSpeeds.y.y);
-                        double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
-                        double mafter = balli.getMass()*getAbsVelocity(balli) +
-                                ballj.getMass()*getAbsVelocity(ballj);
-                        System.out.println("vdiff: " + (vafter - vbefore));
-                        System.out.println("mdiff: " + (mafter - mbefore));
+                    if (!collided.get(i) && !collided.get(j)) {
+                        if (Math.pow((xposi - ballj.getX()), 2) + Math.pow((yposi - ballj.getY()), 2)
+                                < Math.pow((radiusi + ballj.getRadius()), 2) && !collided.get(0) && !collided.get(1)) {
+                            collided.set(i, true);
+                            collided.set(j, true);
+                            double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
+                            double mbefore = balli.getMass() * getAbsVelocity(balli) +
+                                    ballj.getMass() * getAbsVelocity(ballj);
+                            Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
+                            balli.setVx(newSpeeds.x.x);
+                            balli.setVy(newSpeeds.x.y);
+                            ballj.setVx(newSpeeds.y.x);
+                            ballj.setVy(newSpeeds.y.y);
+                            double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
+                            double mafter = balli.getMass() * getAbsVelocity(balli) +
+                                    ballj.getMass() * getAbsVelocity(ballj);
+                            System.out.println("vdiff: " + (vafter - vbefore));
+                            System.out.println("mdiff: " + (mafter - mbefore));
+                        }
+                    } else {
+                        collided.set(i,false);
+                        collided.set(j,false);
                     }
                 }
-        }        //int i = 0;
+        }
         for (Ball b: balls) {
             b.tickPos(deltaT);
-            if(collided.get(0)) {
-                timers.set(0, timers.get(0) - 1);
-                timers.set(1, timers.get(1) - 1);
-                if (timers.get(1) <= 0&& timers.get(0)<=0) {
-                    collided.set(0, false);
-                    collided.set(1,false);
-                    timers.set(0,50);
-                    timers.set(1,50);
-                }
-            }
-            //i++;
-            //System.out.println(timers.get(0) + " " + timers.get(1));
-
         }
 
     }
