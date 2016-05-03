@@ -51,8 +51,8 @@ public class World {
                         double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
                         double mafter = balli.getMass()*getAbsVelocity(balli) +
                                 ballj.getMass()*getAbsVelocity(ballj);
-                        //System.out.println("vdiff: " + (vafter - vbefore));
-                        //System.out.println("mdiff: " + (mafter - mbefore));
+                        System.out.println("vdiff: " + (vafter - vbefore));
+                        System.out.println("mdiff: " + (mafter - mbefore));
                     }
                 }
         }        //int i = 0;
@@ -86,12 +86,15 @@ public class World {
         //System.out.println(b2.getMass());
         double colAngle1 = getAngle(b1, b2);
         double colAngle2 = getAngle(b1, b2)+Math.PI;
+        double perpAngle1 = colAngle1+Math.PI;
+        double perpAngle2 = colAngle1+Math.PI;
         Pair<Double> polarb1 = rectToPolar(b1.getVx(), b1.getVy());
         Pair<Double> polarb2 = rectToPolar(b2.getVx(), b2.getVy());
-
         double u1 = polarb1.x*Math.cos(polarb1.y-colAngle1);
+        double perpU1 = polarb1.x*Math.cos(polarb1.y-perpAngle1);
         boolean dir1 = u1>0;
         double u2 = polarb2.x*Math.cos(polarb2.y-colAngle2);
+        double perpU2 = polarb1.x*Math.cos(polarb1.y-perpAngle2);
         boolean dir2 = u2>0;
         //System.out.println(polarb1.x);
         //System.out.println(polarb2.x);
@@ -115,8 +118,12 @@ public class World {
 
         Pair<Double> vel1 = polarToRect(colAngle1,v1);
         Pair<Double> vel2 = polarToRect(colAngle2,v2);
+        Pair<Double> vel1perp = polarToRect(perpAngle1, perpU1);
+        Pair<Double> vel2perp = polarToRect(perpAngle2, perpU2);
+        Pair<Double> vel1final = new Pair<>(vel1.x+vel1perp.x, vel1.y+ vel1perp.y);
+        Pair<Double> vel2final = new Pair<>(vel2.x+vel2perp.x, vel2.y+ vel2perp.y);
 
-        return new Pair<>(vel1,vel2);
+        return new Pair<>(vel1final,vel2final);
     }
 
     private double getAbsVelocity(Ball ball){
