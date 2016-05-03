@@ -34,7 +34,7 @@ public class World {
                     Ball ballj = balls.get(j);
                     if (Math.pow((xposi - ballj.getX()),2) + Math.pow((yposi - ballj.getY()),2)
                             < Math.pow((radiusi + ballj.getRadius()),2)){
-                        double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
+                        double vbefore = getAbsVelocity(balli) - getAbsVelocity(ballj);
                         double mbefore = balli.getMass()*getAbsVelocity(balli) +
                                 ballj.getMass()*getAbsVelocity(ballj);
                         Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
@@ -42,7 +42,7 @@ public class World {
                         balli.setVy(newSpeeds.x.y);
                         ballj.setVx(newSpeeds.y.x);
                         ballj.setVy(newSpeeds.y.y);
-                        double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
+                        double vafter = getAbsVelocity(balli) - getAbsVelocity(ballj);
                         double mafter = balli.getMass()*getAbsVelocity(balli) +
                                 ballj.getMass()*getAbsVelocity(ballj);
                         System.out.println("vdiff: " + (vafter - vbefore));
@@ -61,17 +61,18 @@ public class World {
         double m1 = b1.getMass();
         double m2 = b2.getMass();
 
-        Pair<Double> direction1 = getCollisionDirection(b1, b2);
-        Pair<Double> direction2 = getCollisionDirection(b2, b1);
+        double angle = getAngle(b1, b2);
 
         double u1 = getAbsVelocity(b1);
         double u2 = getAbsVelocity(b2);
 
-        double v1 = (m2*u1-m1*u1-2*m2*u2)/(m1+m2);
-        double v2 = (m1*u2-m2*u2-2*m1*u1)/(m1+m2);
+        double v1 = (-m2*u1+m1*u1+2*m2*u2)/(m1+m2);
+        double v2 = (-m1*u2+m2*u2+2*m1*u1)/(m1+m2);
 
-        Pair<Double> vel1 = new Pair<>(-v1*direction1.x, -v1*direction1.y);
-        Pair<Double> vel2 = new Pair<>(-v2*direction2.x, -v2*direction2.y);
+        System.out.println();
+
+        Pair<Double> vel1 = new Pair<>(-v1*Math.cos(angle), -v1*Math.sin(angle));
+        Pair<Double> vel2 = new Pair<>(v2*Math.cos(angle), v2*Math.sin(angle));
 
         return new Pair<>(vel1,vel2);
     }
@@ -80,10 +81,9 @@ public class World {
         return Math.sqrt(Math.pow(ball.getVx(),2) + Math.pow(ball.getVy(),2));
     }
 
-    private Pair<Double> getCollisionDirection(Ball b1, Ball b2){
+    private Double getAngle(Ball b1, Ball b2){
         double xdiff = b1.getX() - b2.getX();
         double ydiff = b1.getY() - b2.getY();
-        double normFactor = Math.sqrt(Math.pow(xdiff,2) + Math.pow(ydiff,2));
-        return new Pair<>(xdiff/normFactor,ydiff/normFactor);
+        return ydiff/xdiff;
     }
 }
