@@ -30,7 +30,7 @@ public class Ball {
         if (pixelY < radius || pixelY > d.height - radius) {
             vy = -vy;
         } else {
-            vy += 9.82 * deltaT;
+           // vy += 9.82 * deltaT;
         }
     }
 
@@ -61,7 +61,7 @@ public class Ball {
     }
 
     public double getMass(){
-        return Math.PI*Math.pow(radius,2)/2;
+        return ((4*Math.PI*Math.pow(radius,3))/3)/1000;
     }
 
     protected double getVx(){

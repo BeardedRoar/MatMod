@@ -10,8 +10,8 @@ public class Bounce extends Animation {
     protected void initAnimator() {
         deltaT=0.005; // simulation time interval in seconds
         setDelay((int)(1000*deltaT)); // needed for Animation superclass
-        Ball b1 = new Ball(d, 2, 2, 2, 0, 40, 25, Color.RED);
-        Ball b2 = new Ball(d, 4, 2, -3, 0, 40, 45, Color.BLUE);
+        Ball b1 = new Ball(d, 1, 4, 2, 0, 40, 25, Color.RED);
+        Ball b2 = new Ball(d, 4, 4, -5, 0, 40, 30, Color.BLUE);
 
         world = new World();
         world.addBall(b1);
