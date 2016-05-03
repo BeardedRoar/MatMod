@@ -1,6 +1,7 @@
 package edu.cth.balls;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,8 +10,12 @@ import java.util.List;
 public class World {
 
     private final List<Ball> balls = new ArrayList();
+    private final List<Boolean> collided = new ArrayList();
+    private int timer = 5;
 
     public World(){
+        collided.add(false);
+        collided.add(false);
 
     }
 
@@ -22,9 +27,6 @@ public class World {
         for (Ball b : balls) {
             b.tickForWalls(deltaT);
         }
-        for (Ball b : balls) {
-            b.tickPos(deltaT);
-        }
         for(int i = 0; i < balls.size(); i++){
             Ball balli = balls.get(i);
             double xposi = balli.getX();
@@ -33,8 +35,10 @@ public class World {
                 for(int j = (i+1); j < balls.size(); j++){
                     Ball ballj = balls.get(j);
                     if (Math.pow((xposi - ballj.getX()),2) + Math.pow((yposi - ballj.getY()),2)
-                            < Math.pow((radiusi + ballj.getRadius()),2)){
-                        double vbefore = getAbsVelocity(balli) - getAbsVelocity(ballj);
+                            < Math.pow((radiusi + ballj.getRadius()),2)&& !collided.get(0) && !collided.get(1)){
+                        collided.set(i, true);
+                        collided.set(j, true);
+                        double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
                         double mbefore = balli.getMass()*getAbsVelocity(balli) +
                                 ballj.getMass()*getAbsVelocity(ballj);
                         Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
@@ -49,6 +53,14 @@ public class World {
                         System.out.println("mdiff: " + (mafter - mbefore));
                     }
                 }
+        }
+        int i = 0;
+        Iterator<Ball> ballsIt = balls.iterator();
+        while( ballsIt.hasNext()){
+            ballsIt.next().tickPos(deltaT);
+            collided.set(i,false);
+            i++;
+
         }
 
     }
