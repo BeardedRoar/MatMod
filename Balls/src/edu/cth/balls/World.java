@@ -82,48 +82,33 @@ public class World {
     private Pair<Pair<Double>> calcCollision(Ball b1, Ball b2){
         double m1 = b1.getMass();
         double m2 = b2.getMass();
-        //System.out.println(b1.getMass());
-        //System.out.println(b2.getMass());
-        double colAngle1 = getAngle(b1, b2);
-        double colAngle2 = getAngle(b1, b2)+Math.PI;
-        double perpAngle1 = colAngle1+Math.PI;
-        double perpAngle2 = colAngle1+Math.PI;
+
+        double alpha = getAngle(b1, b2);
+
         Pair<Double> polarb1 = rectToPolar(b1.getVx(), b1.getVy());
         Pair<Double> polarb2 = rectToPolar(b2.getVx(), b2.getVy());
-        double u1 = polarb1.x*Math.cos(polarb1.y-colAngle1);
-        double perpU1 = polarb1.x*Math.cos(polarb1.y-perpAngle1);
-        boolean dir1 = u1>0;
-        double u2 = polarb2.x*Math.cos(polarb2.y-colAngle2);
-        double perpU2 = polarb1.x*Math.cos(polarb1.y-perpAngle2);
-        boolean dir2 = u2>0;
-        //System.out.println(polarb1.x);
-        //System.out.println(polarb2.x);
-        System.out.println("u1 = " + u1);
-        System.out.println("u2 = " + u2);
+
+        double beta1 = polarb1.y-alpha;
+        double beta2 = polarb2.y-alpha;
+
+        double u1 = polarb1.x*Math.cos(beta1);
+        double rv1 = polarb1.x*Math.sin(beta1);
+
+        double u2 = polarb1.x*Math.cos(beta2);
+        double rv2 = polarb1.x*Math.sin(beta2);
+
         double v1 = (m1*u1 -m2*u1+2*m2*u2)/(m1+m2);
         double v2 = (2*m1*u1-m1*u2+m2*u2)/(m1+m2);
-        boolean dir3 = v1>0;
-        boolean dir4 = v1>0;
         System.out.println("v1 = " + v1);
         System.out.println("v2 = " + v2);
-        if(dir1==dir3){
-            v1=-v1;
-        }else{
-            colAngle1= colAngle1+Math.PI;
-        }if(dir2==dir4){
-            v2 =-v2;
-        }else{
-            colAngle2 = colAngle2+Math.PI;
-        }
 
-        Pair<Double> vel1 = polarToRect(colAngle1,v1);
-        Pair<Double> vel2 = polarToRect(colAngle2,v2);
-        Pair<Double> vel1perp = polarToRect(perpAngle1, perpU1);
-        Pair<Double> vel2perp = polarToRect(perpAngle2, perpU2);
-        Pair<Double> vel1final = new Pair<>(vel1.x+vel1perp.x, vel1.y+ vel1perp.y);
-        Pair<Double> vel2final = new Pair<>(vel2.x+vel2perp.x, vel2.y+ vel2perp.y);
+        Pair<Double>polarAfter1 = rectToPolar(v1,rv1);
+        Pair<Double>polarAfter2 = rectToPolar(v2,rv2);
 
-        return new Pair<>(vel1final,vel2final);
+        Pair<Double> vel1 = polarToRect(polarAfter1.y+alpha, polarAfter1.x);
+        Pair<Double> vel2 = polarToRect(polarAfter2.y+alpha, polarAfter2.x);
+
+        return new Pair<>(vel1,vel2);
     }
 
     private double getAbsVelocity(Ball ball){
