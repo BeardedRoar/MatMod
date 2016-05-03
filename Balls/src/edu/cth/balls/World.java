@@ -11,15 +11,13 @@ public class World {
 
     private final List<Ball> balls = new ArrayList();
     private final List<Boolean> collided = new ArrayList();
-    private final List<Integer> timers = new ArrayList<>();
 
     public World(){
-        collided.add(false);
-        collided.add(false);
     }
 
     public void addBall(Ball ball){
         balls.add(ball);
+        collided.add(false);
     }
 
     public void tick(double deltaT){
@@ -83,8 +81,8 @@ public class World {
         double u1 = polarb1.x*Math.cos(beta1);
         double rv1 = polarb1.x*Math.sin(beta1);
 
-        double u2 = polarb1.x*Math.cos(beta2);
-        double rv2 = polarb1.x*Math.sin(beta2);
+        double u2 = polarb2.x*Math.cos(beta2);
+        double rv2 = polarb2.x*Math.sin(beta2);
 
         double v1 = (m1*u1 -m2*u1+2*m2*u2)/(m1+m2);
         double v2 = (2*m1*u1-m1*u2+m2*u2)/(m1+m2);
