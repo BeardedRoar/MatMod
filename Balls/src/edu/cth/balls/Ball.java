@@ -24,10 +24,10 @@ public class Ball {
     }
 
     protected void tickForWalls(double deltaT){
-        if (pixelX < radius || pixelX > d.width - radius) {
+        if (pixelX < radius && vx < 0 || pixelX > d.width - radius && vx > 0) {
             vx = -vx;
         }
-        if (pixelY < radius || pixelY > d.height - radius) {
+        if (pixelY < radius && vy < 0 || pixelY > d.height - radius && vy > 0) {
             vy = -vy;
         } else {
             vy += 9.82 * deltaT;
