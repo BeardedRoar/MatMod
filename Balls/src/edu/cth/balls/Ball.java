@@ -58,6 +58,7 @@ public class Ball {
         g.setColor(color);
         g.fillOval( pixelX - radius
                 , pixelY - radius, radius * 2, radius * 2);
+        //System.out.println("x: " + x + " y: " + y);
     }
 
     public double getMass(){
@@ -78,5 +79,9 @@ public class Ball {
 
     protected void setVy(double vy){
         this.vy = vy;
+    }
+
+    protected Color getColor(){
+        return color;
     }
 }

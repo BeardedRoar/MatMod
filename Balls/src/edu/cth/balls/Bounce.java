@@ -8,16 +8,20 @@ public class Bounce extends Animation {
     private World world;
 
     protected void initAnimator() {
+        System.out.println(d);
         deltaT=0.005; // simulation time interval in seconds
         setDelay((int)(1000*deltaT)); // needed for Animation superclass
+        /*
         Ball b1 = new Ball(d, 1, 4, 2, 0, 40, 15, Color.RED);
         Ball b2 = new Ball(d, 4, 5, -5, 0, 40, 20, Color.BLUE);
         Ball b3 = new Ball(d, 6, 3, -2, 0, 40, 25, Color.GREEN);
         Ball b4 = new Ball(d, 2, 4, 2, 0, 40, 18, Color.ORANGE);
         Ball b5 = new Ball(d, 3, 3, -5, 0, 40, 23, Color.CYAN);
         Ball b6 = new Ball(d, 5, 2, -1, 0, 40, 28, Color.YELLOW);
+        */
 
         world = new World();
+        /*
         world.addBall(b1);
         world.addBall(b2);
         world.addBall(b3);
@@ -25,6 +29,25 @@ public class Bounce extends Animation {
         world.addBall(b4);
         world.addBall(b5);
         world.addBall(b6);
+        */
+
+        for(int i = 0; i < 10; i++){
+            try{
+                int radius = (int)(Math.random()*30)+10;
+                world.addBall(new Ball(
+                        d,
+                        (int)((Math.random()*((d.getWidth()-radius*2))+radius)/40),
+                        (int)((Math.random()*((d.getHeight()-radius*2))+radius)/40),
+                        (int)((Math.random()*10)-5),
+                        (int)((Math.random()*10)-5),
+                        40,
+                        radius,
+                        new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))
+                ));
+            } catch (IllegalStateException e){
+
+            }
+        }
     }
 
     protected void paintAnimator(Graphics g) {

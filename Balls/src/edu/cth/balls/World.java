@@ -20,8 +20,15 @@ public class World {
     }
 
     public void addBall(Ball ball){
+        for (Ball checkBall : balls){
+            if (Math.pow((ball.getX() - checkBall.getX()), 2) + Math.pow((ball.getY() - checkBall.getY()), 2)
+                    < Math.pow((ball.getRadius() + checkBall.getRadius()), 2)){
+                throw new IllegalStateException("Ball inside ball");
+            }
+        }
         balls.add(ball);
         collided.add(new ArrayList<Ball>(balls.size()*2));
+        //System.out.println(ball.getColor());
     }
 
     public void tick(double deltaT){
