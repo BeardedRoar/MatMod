@@ -31,9 +31,9 @@ public class Bounce extends Animation {
         world.addBall(b6);
         */
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 50; i++){
             try{
-                int radius = (int)(Math.random()*30)+10;
+                int radius = (int)(Math.random()*15)+25;
                 world.addBall(new Ball(
                         d,
                         (int)((Math.random()*((d.getWidth()-radius*2))+radius)/40),

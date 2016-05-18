@@ -13,6 +13,7 @@ public abstract class Animation
     protected Thread animationThread;
 
     final public void init() {
+        resize(1600,800);
         d = getSize();
         im = createImage(d.width, d.height);
         offscreen = im.getGraphics();
