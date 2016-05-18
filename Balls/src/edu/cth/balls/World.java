@@ -9,10 +9,14 @@ import java.util.List;
  */
 public class World {
 
-    private final List<Ball> balls = new ArrayList();
-    private final List<Boolean> collided = new ArrayList();
+    private final List<Ball> balls;
+    private final List<Boolean> collided;
+    private final List<Pair<Ball>> collisions;
 
     public World(){
+        collisions = new ArrayList<Pair<Ball>>();
+        collided = new ArrayList<Boolean>();
+        balls = new ArrayList<Ball>();
     }
 
     public void addBall(Ball ball){
@@ -24,42 +28,56 @@ public class World {
         for (Ball b : balls) {
             b.tickForWalls(deltaT);
         }
+        checkForCollision();
+        resolveCollisions();
+        for (Ball b: balls) {
+            b.tickPos(deltaT);
+        }
+
+    }
+
+    private void checkForCollision(){
         for(int i = 0; i < balls.size(); i++){
             Ball balli = balls.get(i);
             double xposi = balli.getX();
             double yposi = balli.getY();
             double radiusi = balli.getRadius();
-                for(int j = (i+1); j < balls.size(); j++){
-                    Ball ballj = balls.get(j);
-                    if (!collided.get(i) && !collided.get(j)) {
-                        if (Math.pow((xposi - ballj.getX()), 2) + Math.pow((yposi - ballj.getY()), 2)
-                                < Math.pow((radiusi + ballj.getRadius()), 2) && !collided.get(0) && !collided.get(1)) {
-                            collided.set(i, true);
-                            collided.set(j, true);
-                            double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
-                            double mbefore = balli.getMass() * getAbsVelocity(balli) +
-                                    ballj.getMass() * getAbsVelocity(ballj);
-                            Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
-                            balli.setVx(newSpeeds.x.x);
-                            balli.setVy(newSpeeds.x.y);
-                            ballj.setVx(newSpeeds.y.x);
-                            ballj.setVy(newSpeeds.y.y);
-                            double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
-                            double mafter = balli.getMass() * getAbsVelocity(balli) +
-                                    ballj.getMass() * getAbsVelocity(ballj);
-                            System.out.println("vdiff: " + (vafter - vbefore));
-                            System.out.println("mdiff: " + (mafter - mbefore));
-                        }
-                    } else {
-                        collided.set(i,false);
-                        collided.set(j,false);
+            for(int j = (i+1); j < balls.size(); j++){
+                Ball ballj = balls.get(j);
+                if (!collided.get(i) && !collided.get(j)) {
+                    if (Math.pow((xposi - ballj.getX()), 2) + Math.pow((yposi - ballj.getY()), 2)
+                            < Math.pow((radiusi + ballj.getRadius()), 2) && !collided.get(0) && !collided.get(1)) {
+                        collided.set(i, true);
+                        collided.set(j, true);
+                        collisions.add(new Pair<>(balli,ballj));
                     }
+                } else {
+                    collided.set(i,false);
+                    collided.set(j,false);
                 }
+            }
         }
-        for (Ball b: balls) {
-            b.tickPos(deltaT);
-        }
+    }
 
+    private void resolveCollisions(){
+        for (Pair<Ball> collidedBalls : collisions) {
+            Ball balli = collidedBalls.x;
+            Ball ballj = collidedBalls.y;
+            double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
+            double mbefore = balli.getMass() * getAbsVelocity(balli) +
+                    ballj.getMass() * getAbsVelocity(ballj);
+            Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
+            balli.setVx(newSpeeds.x.x);
+            balli.setVy(newSpeeds.x.y);
+            ballj.setVx(newSpeeds.y.x);
+            ballj.setVy(newSpeeds.y.y);
+            double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
+            double mafter = balli.getMass() * getAbsVelocity(balli) +
+                    ballj.getMass() * getAbsVelocity(ballj);
+            System.out.println("vdiff: " + (vafter - vbefore));
+            System.out.println("mdiff: " + (mafter - mbefore));
+        }
+        collisions.clear();
     }
 
     public List<Ball> getBalls(){
