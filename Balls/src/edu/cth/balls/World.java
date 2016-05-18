@@ -10,18 +10,18 @@ import java.util.List;
 public class World {
 
     private final List<Ball> balls;
-    private final List<Boolean> collided;
+    private final List<List<Ball>> collided;
     private final List<Pair<Ball>> collisions;
 
     public World(){
         collisions = new ArrayList<Pair<Ball>>();
-        collided = new ArrayList<Boolean>();
+        collided = new ArrayList<List<Ball>>();
         balls = new ArrayList<Ball>();
     }
 
     public void addBall(Ball ball){
         balls.add(ball);
-        collided.add(false);
+        collided.add(new ArrayList<Ball>(balls.size()*2));
     }
 
     public void tick(double deltaT){
@@ -33,6 +33,7 @@ public class World {
         for (Ball b: balls) {
             b.tickPos(deltaT);
         }
+        checkForClear();
 
     }
 
@@ -44,16 +45,12 @@ public class World {
             double radiusi = balli.getRadius();
             for(int j = (i+1); j < balls.size(); j++){
                 Ball ballj = balls.get(j);
-                if (!collided.get(i) && !collided.get(j)) {
-                    if (Math.pow((xposi - ballj.getX()), 2) + Math.pow((yposi - ballj.getY()), 2)
-                            < Math.pow((radiusi + ballj.getRadius()), 2) && !collided.get(0) && !collided.get(1)) {
-                        collided.set(i, true);
-                        collided.set(j, true);
-                        collisions.add(new Pair<>(balli,ballj));
-                    }
-                } else {
-                    collided.set(i,false);
-                    collided.set(j,false);
+                if (Math.pow((xposi - ballj.getX()), 2) + Math.pow((yposi - ballj.getY()), 2)
+                        < Math.pow((radiusi + ballj.getRadius()), 2) &&
+                        !collided.get(i).contains(ballj) && !collided.get(j).contains(balli)) {
+                    collided.get(i).add(ballj);
+                    collided.get(i).add(balli);
+                    collisions.add(new Pair<>(balli,ballj));
                 }
             }
         }
@@ -78,6 +75,24 @@ public class World {
             System.out.println("mdiff: " + (mafter - mbefore));
         }
         collisions.clear();
+    }
+
+    private void checkForClear(){
+        for(int i = 0; i < balls.size(); i++){
+            Ball balli = balls.get(i);
+            double xposi = balli.getX();
+            double yposi = balli.getY();
+            double radiusi = balli.getRadius();
+            for(int j = (i+1); j < balls.size(); j++){
+                Ball ballj = balls.get(j);
+                if ((collided.get(i).contains(ballj) || collided.get(j).contains(balli)) &&
+                        Math.pow((xposi - ballj.getX()), 2) + Math.pow((yposi - ballj.getY()), 2)
+                        > Math.pow((radiusi + ballj.getRadius()), 2)) {
+                    collided.get(i).remove(ballj);
+                    collided.get(j).remove(balli);
+                }
+            }
+        }
     }
 
     public List<Ball> getBalls(){
