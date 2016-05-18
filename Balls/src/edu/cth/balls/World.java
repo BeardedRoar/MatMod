@@ -71,8 +71,6 @@ public class World {
             double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
             double mafter = balli.getMass() * getAbsVelocity(balli) +
                     ballj.getMass() * getAbsVelocity(ballj);
-            System.out.println("vdiff: " + (vafter - vbefore));
-            System.out.println("mdiff: " + (mafter - mbefore));
         }
         collisions.clear();
     }
@@ -119,8 +117,6 @@ public class World {
 
         double v1 = (m1*u1 -m2*u1+2*m2*u2)/(m1+m2);
         double v2 = (2*m1*u1-m1*u2+m2*u2)/(m1+m2);
-        System.out.println("v1 = " + v1);
-        System.out.println("v2 = " + v2);
 
         Pair<Double>polarAfter1 = rectToPolar(v1,rv1);
         Pair<Double>polarAfter2 = rectToPolar(v2,rv2);
