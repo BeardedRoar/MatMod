@@ -12,10 +12,10 @@ public class Bounce extends Animation {
         setDelay((int)(1000*deltaT)); // needed for Animation superclass
         Ball b1 = new Ball(d, 1, 4, 2, 0, 40, 15, Color.RED);
         Ball b2 = new Ball(d, 4, 5, -5, 0, 40, 20, Color.BLUE);
-        Ball b3 = new Ball(d, 6, 5, -3, 0, 40, 25, Color.GREEN);
+        Ball b3 = new Ball(d, 6, 3, -2, 0, 40, 25, Color.GREEN);
         Ball b4 = new Ball(d, 2, 4, 2, 0, 40, 18, Color.ORANGE);
         Ball b5 = new Ball(d, 3, 3, -5, 0, 40, 23, Color.CYAN);
-        Ball b6 = new Ball(d, 5, 4, -3, 0, 40, 28, Color.YELLOW);
+        Ball b6 = new Ball(d, 5, 2, -1, 0, 40, 28, Color.YELLOW);
 
         world = new World();
         world.addBall(b1);

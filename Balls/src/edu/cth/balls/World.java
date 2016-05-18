@@ -60,17 +60,12 @@ public class World {
         for (Pair<Ball> collidedBalls : collisions) {
             Ball balli = collidedBalls.x;
             Ball ballj = collidedBalls.y;
-            double vbefore = getAbsVelocity(balli) + getAbsVelocity(ballj);
-            double mbefore = balli.getMass() * getAbsVelocity(balli) +
-                    ballj.getMass() * getAbsVelocity(ballj);
             Pair<Pair<Double>> newSpeeds = calcCollision(balli, ballj);
+
             balli.setVx(newSpeeds.x.x);
             balli.setVy(newSpeeds.x.y);
             ballj.setVx(newSpeeds.y.x);
             ballj.setVy(newSpeeds.y.y);
-            double vafter = getAbsVelocity(balli) + getAbsVelocity(ballj);
-            double mafter = balli.getMass() * getAbsVelocity(balli) +
-                    ballj.getMass() * getAbsVelocity(ballj);
         }
         collisions.clear();
     }
@@ -115,7 +110,7 @@ public class World {
         double u2 = polarb2.x*Math.cos(beta2);
         double rv2 = polarb2.x*Math.sin(beta2);
 
-        double v1 = (m1*u1 -m2*u1+2*m2*u2)/(m1+m2);
+        double v1 = (m1*u1-m2*u1+2*m2*u2)/(m1+m2);
         double v2 = (2*m1*u1-m1*u2+m2*u2)/(m1+m2);
 
         Pair<Double>polarAfter1 = rectToPolar(v1,rv1);
